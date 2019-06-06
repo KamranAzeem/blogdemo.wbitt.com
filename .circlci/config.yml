@@ -8,7 +8,7 @@ version: 2.1
 
 
 jobs:
-    contact-server:
+    ssh-connection:
       docker:
         - image: praqma/network-multitool
       steps:
@@ -17,8 +17,7 @@ jobs:
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
-  # Name the workflow "Welcome"
-  Welcome:
+  connect-and-deploy:
     # Run the welcome/run job in its own container
     jobs:
-      - contact-server
+      - ssh-connection
