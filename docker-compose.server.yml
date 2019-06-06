@@ -1,0 +1,45 @@
+version: "3"
+services:
+  blogdemo.wbitt.com:
+    # If you want docker-compose to build an image instead of using a pre-built one,
+    # then, use "build" instruction instead of "image". 
+    # If a Dockerfile is present in the same repository, then 'build' is the BEST option to use.
+    build: .
+    # image:  witline/wordpress-5.1.1-php-7.3-apache-2.4-v-1.0
+    labels:
+      # If you enable traefik.enabled=true, then make 100% sure that the names you provide 
+      # in host are actually pointing to the traefik server (api.witpass.co.uk).
+      - traefik.enable=true
+      - traefik.port=80
+      - traefik.frontend.rule=Host:blogdemo.wbitt.com
+      # Following is an example of using multiple hostnames in 'traefik.frontend.rule'
+      # - traefik.frontend.rule=Host:example.witpass.co.uk,www.witpass.co.uk,witpass.co.uk
+      # The following is just an example to show a combination of Host and PathPrefix rules.
+      # - traefik.frontend.rule=Host:example.witpass.co.uk,PathPrefix:/booking
+
+    env_file:
+      - app.env
+
+    # Adjust the path (on left hand side) according to the setup on the server.
+    volumes:
+      - /home/containers_data/blogdemo.wbitt.com/uploads:/var/www/html/wp-content/uploads
+
+
+    ##########################################################################################################
+    #
+    # Below - developers don't need to modify the network definition, unless asked by the sysadmin.
+    #
+    #########################################################################################################
+
+    networks:
+      # This 'uses' the proxy-net / services-network
+      - services-network
+
+networks:
+  services-network:
+    external: true
+
+
+
+
+

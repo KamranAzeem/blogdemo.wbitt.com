@@ -1,0 +1,75 @@
+version: "3"
+services:
+  blogdemo.wbitt.com:
+    # If you want docker-compose to build an image instead of using a pre-built one,
+    #   then, use "build" instruction instead of "image". 
+    # If a Dockerfile is present in the same repository, then 'build' is the BEST option to use.
+    # image:  witline/wordpress:5.1.1-php-7.3-apache-2.4-v-1.0
+    build: .
+    labels:
+      - traefik.enable=false
+      - traefik.port=80
+      - traefik.frontend.rule=Host:blogdemo.wbitt.com
+      # - traefik.frontend.rule=Host:example.com,www.example.com
+      # Following is an example of using multiple hostnames in 'traefik.frontend.rule'
+      # - traefik.frontend.rule=Host:example.witpass.co.uk,www.witpass.co.uk,witpass.co.uk
+      # The following is just an example to show a combination of Host and PathPrefix rules.
+      # - traefik.frontend.rule=Host:example.witpass.co.uk,PathPrefix:/booking
+
+    env_file:
+      - app.env
+
+    # volumes: 
+    # To setup a persistent location for wordpress uploads,
+    #   , you should do the following in your home-directory:
+    #   $ mkdir /home/kamran/tmp/example.com/uploads -p
+
+    volumes:
+      - /home/kamran/tmp/blogdemo.wbitt.com/uploads:/var/www/html/wp-content/uploads
+
+    # ports:
+    # Disable ports directive when running on production system. Or,
+    # Enable ports directive only on your local work computer.
+    ports:
+      - 80:80
+
+    depends_on:
+      - db.local
+
+  db.local:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecret
+      # MySQL will create database, user-name and user-password at container boot time,
+      #   ,with following values/settings.
+      MYSQL_DATABASE: db_wordpress
+      MYSQL_USER: user_wordpress
+      MYSQL_PASSWORD: secret
+    volumes:
+      - /home/kamran/tmp/blogdemo.wbitt.com/mysql-data-dir:/var/lib/mysql
+
+      # To setup a persistent location for mysql (above), 
+      #   , you should do the following in your home-directory: 
+      #   $ mkdir /home/kamran/tmp/example.com/mysql-data-dir -p
+      #   $ chmod 1777 /home/kamran/tmp/example.com/mysql-data-dir 
+
+
+
+
+    ##########################################################################################################
+    #
+    # Below - developers don't need to modify the network definition, unless asked by the sysadmin.
+    #
+    #########################################################################################################
+
+
+# disable networks section completely on your local computer.
+#    networks:
+#      # This 'uses' the proxy-net / services-network
+#      - services-network
+
+#networks:
+#  services-network:
+#    external: true
+
+
