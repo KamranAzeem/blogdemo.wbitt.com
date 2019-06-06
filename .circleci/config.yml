@@ -22,3 +22,4 @@ workflows:
   connect-and-deploy:
     jobs:
       - ssh-connection
+      - list-docker-containers
