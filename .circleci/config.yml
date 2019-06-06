@@ -6,7 +6,7 @@ jobs:
     docker:
       - image: praqma/network-multitool
     steps:
-      - run: mkdir ~/.ssh ; ssh-keyscan web.wbitt.co.uk > ~/.ssh/known_hosts
+      - run: mkdir ~/.ssh ; ssh-keyscan web.witpass.co.uk > ~/.ssh/known_hosts
       - run: echo ${CI_SSH_PRIVATE_KEY} > ~/.ssh/witpass_web_server_ci_key; chmod go-rwx -R ~/.ssh 
       - run: ssh -i ~/.ssh/witpass_web_server_ci_key  witpass@web.witpass.co.uk uptime
 
