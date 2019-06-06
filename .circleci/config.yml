@@ -10,10 +10,6 @@ jobs:
       - run: mkdir ~/.ssh ; ssh-keyscan web.witpass.co.uk > ~/.ssh/known_hosts
       - run: echo ${CI_SSH_PRIVATE_KEY} | base64 -d  > ~/.ssh/witpass_web_server_ci_key; chmod go-rwx -R ~/.ssh 
       - run: ssh -i ~/.ssh/witpass_web_server_ci_key  witpass@web.witpass.co.uk uptime
-  list-docker-containers:
-    docker:
-      - image: praqma/network-multitool
-    steps:
       - run: ssh -i ~/.ssh/witpass_web_server_ci_key  witpass@web.witpass.co.uk docker ps
 
 
@@ -22,4 +18,3 @@ workflows:
   connect-and-deploy:
     jobs:
       - ssh-connection
-      - list-docker-containers
