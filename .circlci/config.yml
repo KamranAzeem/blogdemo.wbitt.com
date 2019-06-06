@@ -2,9 +2,18 @@
 version: 2.1
 
 # Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
-orbs:
+#orbs:
   # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.3.1
+#  welcome: circleci/welcome-orb@0.3.1
+
+
+jobs:
+    contact-server:
+      docker:
+        - image: praqma/network-multitool
+      steps:
+        - run: echo ${CI_SSH_PRIVATE_KEY} > ~/.ssh/witpass_web_server_ci_key
+        - run: ssh -i ~/.ssh/witpass_web_server_ci_key  root@web.witpass.co.uk uptime
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
@@ -12,4 +21,4 @@ workflows:
   Welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - welcome/run
+      - contact-server
